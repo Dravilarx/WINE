@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, GenerateContentResponse, Type } from '@google/genai';
 import { Wine } from '../types';
 
@@ -45,6 +46,10 @@ const responseSchema = {
       type: Type.STRING,
       description: 'El precio de referencia aproximado del vino encontrado en la web, en la moneda local si es posible (ej. "CLP $25.000", "USD 30"). Si no se encuentra, responder "N/A".',
     },
+    imagenUrl: {
+      type: Type.STRING,
+      description: 'Una URL pública directa a una imagen de alta calidad de la botella del vino (producto solo, fondo blanco o transparente si es posible).',
+    },
   },
   required: ['nombre', 'bodega', 'anada', 'pais', 'tipoUva', 'notasDeCata', 'precioReferencia'],
 };
@@ -63,8 +68,8 @@ export async function analyzeWineLabel(
   };
 
   const textPart = {
-    // FIX: Refined prompt to be more direct and rely on the schema.
-    text: 'Identifica este vino a partir de la imagen de su etiqueta. Extrae la información solicitada en el schema JSON proporcionado.',
+    // FIX: Prompt refinado para solicitar explícitamente la URL de la imagen del producto.
+    text: 'Identifica este vino a partir de la imagen de su etiqueta. Extrae la información solicitada en el schema JSON. Es CRUCIAL que intentes encontrar una URL válida de una imagen limpia del producto (botella) para mostrar en el catálogo.',
   };
 
   try {
@@ -77,7 +82,6 @@ export async function analyzeWineLabel(
       },
     });
 
-    // FIX: Added .trim() to prevent parsing errors from whitespace.
     const jsonString = response.text.trim();
     const parsedJson = JSON.parse(jsonString);
     

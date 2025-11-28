@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Wine } from '../types';
 import { formatCLP } from '../utils/formatters';
@@ -77,7 +78,12 @@ export const WineTable: React.FC<WineTableProps> = ({ wines, onUpdate, onDelete 
                     {wines.map(wine => (
                         <tr key={wine.id} className="hover:bg-slate-800 transition-colors">
                             <td className="p-3 font-medium text-white flex items-center gap-3">
-                                <img src={`data:image/jpeg;base64,${wine.imagenBase64}`} alt={wine.nombre} className="w-10 h-10 object-cover rounded"/>
+                                <img 
+                                    src={wine.imagenUrl || `data:image/jpeg;base64,${wine.imagenBase64}`} 
+                                    onError={(e) => { e.currentTarget.src = `data:image/jpeg;base64,${wine.imagenBase64}`; }}
+                                    alt={wine.nombre} 
+                                    className="w-10 h-10 object-contain rounded bg-white/5"
+                                />
                                 {wine.nombre}
                             </td>
                             <td className="p-3">{wine.bodega}</td>

@@ -1,5 +1,7 @@
 {
   "name": "Marcelo's Wine",
   "description": "Una aplicación para escanear etiquetas de vino, obtener información detallada con Gemini y gestionar tu propia cava de vinos digital.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [
+    "camera"
+  ]
 }
